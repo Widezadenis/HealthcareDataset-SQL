@@ -1,0 +1,24 @@
+#Selects all the data in the healthcare table for a quick view of data.
+SELECT * 
+FROM dbo.healthcare_dataset; 
+
+#Checks to see how many columns and rows are in the daset. There are 1000 rows and 15 columns
+SELECT COUNT(*) AS total_rows
+FROM dbo.healthcare_dataset; 
+
+SELECT COUNT(*) AS total_columns
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'healthcare_dataset'; 
+
+#Checks to see if there are any missing values in the columns
+SELECT * FROM dbo.healthcare_dataset
+WHERE Age IS NULL
+
+#Removes duplicates 
+WITH CTE AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY Name ORDER BY Age) AS row_num
+    FROM dbo.healthcare_dataset
+)
+DELETE FROM CTE WHERE row_num > 1;
+
