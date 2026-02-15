@@ -47,14 +47,34 @@ DATEDIFF(day, Date_of_Admission, Discharge_Date) AS TotalStay
 FROM dbo.healthcare_dataset
 WHERE Admission_Type = 'Emergency';
 
-SELECT Admission_Type, Test_Results, Medical_Condition,
+#SELECT Admission_Type, Test_Results, Medical_Condition,
 DATEDIFF(day, Date_of_Admission, Discharge_Date) AS TotalStay
 FROM dbo.healthcare_dataset
 WHERE Admission_Type = 'Urgent';
 
-SELECT Admission_Type, Test_Results, Medical_Condition, 
+#SELECT Admission_Type, Test_Results, Medical_Condition, 
 DATEDIFF(day, Date_of_Admission, Discharge_Date) AS TotalStay
 FROM dbo.healthcare_dataset
 WHERE Admission_Type = 'Elective';
 
+#Calculates the average stay per age groups
+SELECT 
+    CASE
+        WHEN Age < 18 THEN '<18'
+        WHEN Age BETWEEN 18 AND 24 THEN '18-24'
+        WHEN Age BETWEEN 25 AND 34 THEN '25-34'
+        WHEN Age BETWEEN 35 AND 44 THEN '35-44'
+        ELSE '45+'
+    END AS AgeGroup,
+    AVG(DATEDIFF(day, Date_of_Admission, Discharge_Date)) AS AvgStay
+FROM dbo.healthcare_dataset
+GROUP BY 
+    CASE
+        WHEN Age < 18 THEN '<18'
+        WHEN Age BETWEEN 18 AND 24 THEN '18-24'
+        WHEN Age BETWEEN 25 AND 34 THEN '25-34'
+        WHEN Age BETWEEN 35 AND 44 THEN '35-44'
+        ELSE '45+'
+    END
+ORDER BY AgeGroup;
 
